@@ -7,23 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4C6430926BC20BE00B518EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6430826BC20BE00B518EA /* AppDelegate.swift */; };
-		D4C6430B26BC20BE00B518EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6430A26BC20BE00B518EA /* SceneDelegate.swift */; };
-		D4C6430D26BC20BE00B518EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6430C26BC20BE00B518EA /* ViewController.swift */; };
-		D4C6431026BC20BE00B518EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4C6430E26BC20BE00B518EA /* Main.storyboard */; };
 		D4C6431226BC20C200B518EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4C6431126BC20C200B518EA /* Assets.xcassets */; };
-		D4C6431526BC20C200B518EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4C6431326BC20C200B518EA /* LaunchScreen.storyboard */; };
+		D4C6431D26BC210700B518EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6431C26BC210700B518EA /* AppDelegate.swift */; };
+		D4C6432126BC217E00B518EA /* NewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6431E26BC217E00B518EA /* NewController.swift */; };
+		D4C6432226BC217E00B518EA /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6431F26BC217E00B518EA /* ScannerViewController.swift */; };
+		D4C6432326BC217E00B518EA /* DashboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6432026BC217E00B518EA /* DashboardCell.swift */; };
+		D4C6432526BC21DA00B518EA /* BluetoothSerial.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C6432426BC21DA00B518EA /* BluetoothSerial.swift */; };
+		D4C6432926BC226600B518EA /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C6432726BC226600B518EA /* MBProgressHUD.m */; };
+		D4C6432B26BC22B700B518EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4C6432A26BC22B700B518EA /* Main.storyboard */; };
+		D4C6432D26BC22C400B518EA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C6432C26BC22C400B518EA /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D4C6430526BC20BE00B518EA /* Keyless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Keyless.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4C6430826BC20BE00B518EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D4C6430A26BC20BE00B518EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D4C6430C26BC20BE00B518EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D4C6430F26BC20BE00B518EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4C6431126BC20C200B518EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D4C6431426BC20C200B518EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4C6431626BC20C200B518EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4C6431C26BC210700B518EA /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D4C6431E26BC217E00B518EA /* NewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewController.swift; sourceTree = "<group>"; };
+		D4C6431F26BC217E00B518EA /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
+		D4C6432026BC217E00B518EA /* DashboardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCell.swift; sourceTree = "<group>"; };
+		D4C6432426BC21DA00B518EA /* BluetoothSerial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothSerial.swift; sourceTree = "<group>"; };
+		D4C6432626BC226500B518EA /* Keyless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Keyless-Bridging-Header.h"; sourceTree = "<group>"; };
+		D4C6432726BC226600B518EA /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		D4C6432826BC226600B518EA /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		D4C6432A26BC22B700B518EA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D4C6432C26BC22C400B518EA /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +64,52 @@
 		D4C6430726BC20BE00B518EA /* Keyless */ = {
 			isa = PBXGroup;
 			children = (
-				D4C6430826BC20BE00B518EA /* AppDelegate.swift */,
-				D4C6430A26BC20BE00B518EA /* SceneDelegate.swift */,
-				D4C6430C26BC20BE00B518EA /* ViewController.swift */,
-				D4C6430E26BC20BE00B518EA /* Main.storyboard */,
-				D4C6431126BC20C200B518EA /* Assets.xcassets */,
-				D4C6431326BC20C200B518EA /* LaunchScreen.storyboard */,
+				D4C6431C26BC210700B518EA /* AppDelegate.swift */,
+				D4C6432A26BC22B700B518EA /* Main.storyboard */,
+				D4C6433026BC253900B518EA /* Controllers */,
+				D4C6432F26BC251700B518EA /* Resources */,
+				D4C6432E26BC24E800B518EA /* Supporting Files */,
 				D4C6431626BC20C200B518EA /* Info.plist */,
+				D4C6432626BC226500B518EA /* Keyless-Bridging-Header.h */,
 			);
 			path = Keyless;
+			sourceTree = "<group>";
+		};
+		D4C6432E26BC24E800B518EA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D4C6432426BC21DA00B518EA /* BluetoothSerial.swift */,
+				D4C6432826BC226600B518EA /* MBProgressHUD.h */,
+				D4C6432726BC226600B518EA /* MBProgressHUD.m */,
+				D4C6432C26BC22C400B518EA /* LaunchScreen.xib */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D4C6432F26BC251700B518EA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D4C6431126BC20C200B518EA /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D4C6433026BC253900B518EA /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D4C6431F26BC217E00B518EA /* ScannerViewController.swift */,
+				D4C6433126BC26EA00B518EA /* NewController */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		D4C6433126BC26EA00B518EA /* NewController */ = {
+			isa = PBXGroup;
+			children = (
+				D4C6432026BC217E00B518EA /* DashboardCell.swift */,
+				D4C6431E26BC217E00B518EA /* NewController.swift */,
+			);
+			path = NewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -98,6 +143,7 @@
 				TargetAttributes = {
 					D4C6430426BC20BE00B518EA = {
 						CreatedOnToolsVersion = 12.5;
+						LastSwiftMigration = 1250;
 					};
 				};
 			};
@@ -124,9 +170,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4C6431526BC20C200B518EA /* LaunchScreen.storyboard in Resources */,
+				D4C6432B26BC22B700B518EA /* Main.storyboard in Resources */,
+				D4C6432D26BC22C400B518EA /* LaunchScreen.xib in Resources */,
 				D4C6431226BC20C200B518EA /* Assets.xcassets in Resources */,
-				D4C6431026BC20BE00B518EA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,32 +183,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4C6430D26BC20BE00B518EA /* ViewController.swift in Sources */,
-				D4C6430926BC20BE00B518EA /* AppDelegate.swift in Sources */,
-				D4C6430B26BC20BE00B518EA /* SceneDelegate.swift in Sources */,
+				D4C6432126BC217E00B518EA /* NewController.swift in Sources */,
+				D4C6432926BC226600B518EA /* MBProgressHUD.m in Sources */,
+				D4C6432226BC217E00B518EA /* ScannerViewController.swift in Sources */,
+				D4C6432326BC217E00B518EA /* DashboardCell.swift in Sources */,
+				D4C6431D26BC210700B518EA /* AppDelegate.swift in Sources */,
+				D4C6432526BC21DA00B518EA /* BluetoothSerial.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		D4C6430E26BC20BE00B518EA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4C6430F26BC20BE00B518EA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		D4C6431326BC20C200B518EA /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4C6431426BC20C200B518EA /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		D4C6431726BC20C200B518EA /* Debug */ = {
@@ -286,15 +316,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MHK4AT6N44;
 				INFOPLIST_FILE = Keyless/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = philipRoot0.Keyless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Keyless/Keyless-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -305,15 +341,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MHK4AT6N44;
 				INFOPLIST_FILE = Keyless/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = philipRoot0.Keyless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Keyless/Keyless-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
