@@ -14,7 +14,7 @@ import CoreBluetooth
 var serial: BluetoothSerial!
 
 // Delegate functions
-protocol BluetoothSerialDelegate: class {
+protocol BluetoothSerialDelegate: AnyObject {
     // ** Required **
     
     /// Called when de state of the CBCentralManager changes (e.g. when bluetooth is turned on/off)
@@ -176,7 +176,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func sendBytesToDevice(_ bytes: [UInt8]) {
         guard isReady else { return }
         
-        let data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
+        let data = Data(bytes)
         connectedPeripheral!.writeValue(data, for: writeCharacteristic!, type: writeType)
     }
     

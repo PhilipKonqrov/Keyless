@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D43382F02724C4CB009A848C /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43382EF2724C4CB009A848C /* Loader.swift */; };
-		D43382F22724C4DA009A848C /* Loader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43382F12724C4DA009A848C /* Loader.xib */; };
+		9252984A272C99D30067205A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92529849272C99D30067205A /* Helper.swift */; };
 		D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435CB8F24C0F12400BBD60B /* DashboardCell.swift */; };
 		D4D048EE24A1720F00EC4217 /* NewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D048ED24A1720F00EC4217 /* NewController.swift */; };
 		FA5AB96B1B77A30F007443C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AB96A1B77A30F007443C8 /* AppDelegate.swift */; };
@@ -16,7 +15,6 @@
 		FA5AB9721B77A30F007443C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5AB9711B77A30F007443C8 /* Images.xcassets */; };
 		FA5AB9751B77A30F007443C8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5AB9731B77A30F007443C8 /* LaunchScreen.xib */; };
 		FA5AB98B1B77A398007443C8 /* BluetoothSerial.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AB98A1B77A398007443C8 /* BluetoothSerial.swift */; };
-		FA62F58D1B8B85B3000479B6 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FA62F58C1B8B85B3000479B6 /* MBProgressHUD.m */; };
 		FA755D301B78B8FE00A902FE /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA755D2F1B78B8FE00A902FE /* ScannerViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,8 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D43382EF2724C4CB009A848C /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
-		D43382F12724C4DA009A848C /* Loader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Loader.xib; sourceTree = "<group>"; };
+		92529849272C99D30067205A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D435CB8F24C0F12400BBD60B /* DashboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCell.swift; sourceTree = "<group>"; };
 		D4D048ED24A1720F00EC4217 /* NewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewController.swift; sourceTree = "<group>"; };
 		FA5AB9651B77A30E007443C8 /* Keyless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Keyless.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,8 +40,6 @@
 		FA5AB9741B77A30F007443C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		FA5AB97A1B77A30F007443C8 /* BMW-RemoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BMW-RemoteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5AB98A1B77A398007443C8 /* BluetoothSerial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothSerial.swift; sourceTree = "<group>"; };
-		FA62F58B1B8B85B3000479B6 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		FA62F58C1B8B85B3000479B6 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		FA755D2F1B78B8FE00A902FE /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,10 +102,7 @@
 				FA5AB96A1B77A30F007443C8 /* AppDelegate.swift */,
 				D435CB8D24C0EEC100BBD60B /* ViewControllers */,
 				FA5AB98A1B77A398007443C8 /* BluetoothSerial.swift */,
-				D43382EF2724C4CB009A848C /* Loader.swift */,
-				D43382F12724C4DA009A848C /* Loader.xib */,
-				FA62F58B1B8B85B3000479B6 /* MBProgressHUD.h */,
-				FA62F58C1B8B85B3000479B6 /* MBProgressHUD.m */,
+				92529849272C99D30067205A /* Helper.swift */,
 				FA5AB96E1B77A30F007443C8 /* Main.storyboard */,
 				FA5AB9731B77A30F007443C8 /* LaunchScreen.xib */,
 				FA5AB9711B77A30F007443C8 /* Images.xcassets */,
@@ -217,7 +209,6 @@
 			files = (
 				FA5AB9701B77A30F007443C8 /* Main.storyboard in Resources */,
 				FA5AB9751B77A30F007443C8 /* LaunchScreen.xib in Resources */,
-				D43382F22724C4DA009A848C /* Loader.xib in Resources */,
 				FA5AB9721B77A30F007443C8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,12 +228,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA5AB98B1B77A398007443C8 /* BluetoothSerial.swift in Sources */,
+				9252984A272C99D30067205A /* Helper.swift in Sources */,
 				D4D048EE24A1720F00EC4217 /* NewController.swift in Sources */,
 				FA5AB96B1B77A30F007443C8 /* AppDelegate.swift in Sources */,
 				FA755D301B78B8FE00A902FE /* ScannerViewController.swift in Sources */,
 				D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */,
-				D43382F02724C4CB009A848C /* Loader.swift in Sources */,
-				FA62F58D1B8B85B3000479B6 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

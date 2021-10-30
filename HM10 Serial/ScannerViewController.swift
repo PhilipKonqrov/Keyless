@@ -9,7 +9,9 @@
 import UIKit
 import CoreBluetooth
 
-final class ScannerViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BluetoothSerialDelegate {
+final class ScannerViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BluetoothSerialDelegate, Loadable {
+    
+    
 
 //MARK: IBOutlets
     
@@ -25,8 +27,7 @@ final class ScannerViewController: UIViewController, UITableViewDataSource, UITa
     /// The peripheral the user has selected
     var selectedPeripheral: CBPeripheral?
     
-    /// Progress hud shown
-    var progressHUD: MBProgressHUD?
+    var loader: UIAlertController?
     
     
 //MARK: Functions
@@ -68,19 +69,14 @@ final class ScannerViewController: UIViewController, UITableViewDataSource, UITa
             return
         }
         
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
+        dismissLoader()
         
         if let _ = selectedPeripheral {
             serial.disconnect()
             selectedPeripheral = nil
         }
         
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
-        hud?.labelText = "Failed to connect"
-        hud?.hide(true, afterDelay: 2)
+        showLoader(withText: "Failed to connect", dismissAfter: 1)
     }
     
     
@@ -113,8 +109,7 @@ final class ScannerViewController: UIViewController, UITableViewDataSource, UITa
         serial.stopScan()
         selectedPeripheral = peripherals[(indexPath as NSIndexPath).row].peripheral
         serial.connectToPeripheral(selectedPeripheral!)
-        progressHUD = MBProgressHUD.showAdded(to: view, animated: true)
-        progressHUD!.labelText = "Connecting"
+        showLoader()
         
         // TODO: Timer doesn't use connecting ID
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ScannerViewController.connectTimeOut), userInfo: nil, repeats: false)
@@ -137,45 +132,29 @@ final class ScannerViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func serialDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
+        dismissLoader()
         
         tryAgainButton.isEnabled = true
-                
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
-        hud?.labelText = "Failed to connect"
-        hud?.hide(true, afterDelay: 1.0)
+        showLoader(withText: "Failed to connect", dismissAfter: 1)
     }
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
+        dismissLoader()
         
         tryAgainButton.isEnabled = true
-        
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
-        hud?.labelText = "Failed to connect"
-        hud?.hide(true, afterDelay: 1.0)
+        showLoader(withText: "Failed to connect", dismissAfter: 1)
 
     }
     
     func serialIsReady(_ peripheral: CBPeripheral) {
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
+        dismissLoader()
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadStartViewController"), object: self)
         dismiss(animated: true, completion: nil)
     }
     
     func serialDidChangeState() {
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
+        dismissLoader()
         
         if serial.centralManager.state != .poweredOn {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadStartViewController"), object: self)

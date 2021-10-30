@@ -11,7 +11,6 @@ import CoreBluetooth
 class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     
     @IBOutlet weak var tableView: UITableView!
-    var loader: UIView?
     var isConnecting = false
     var isConnected = false
     var isStarted = false
@@ -19,11 +18,11 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     var isLightsOn = false
     var isLocked = true
     var lockOverride = false
-    var progressHUD: MBProgressHUD?
 //    let remoteStarterId = "637D5AC5-3EED-DAE7-8E10-FA550CA6877E"
     let remoteStarterId = "39B01AB6-EABC-3B29-5B46-7D92A28DFF9C"
     var refreshControl = UIRefreshControl()
     var selectedPeripheral: CBPeripheral?
+    var loader: UIAlertController?
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -40,11 +39,6 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         }
         
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        presentLoader()
-//    }
     
     @objc func refresh(_ sender: AnyObject) {
         refreshControl.endRefreshing()
@@ -76,14 +70,8 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
             return
         }
         
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
-        
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
-        hud?.labelText = "Failed to connect"
-        hud?.hide(true, afterDelay: 2)
+        dismissLoader()
+        showLoader(withText: "Failed to connect", dismissAfter: 2)
     }
     
     func notConnectedAlert() {
@@ -206,9 +194,6 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         guard let peripheral = selectedPeripheral else { return }
         serial.stopScan()
         serial.connectToPeripheral(peripheral)
-        progressHUD = MBProgressHUD.showAdded(to: view, animated: true)
-        progressHUD!.labelText = "Connecting"
-        
         delay(10) {
             self.connectTimeOut()
         }
@@ -216,14 +201,10 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     
     func serialDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
         isConnecting = false
-        if let hud = progressHUD {
-            hud.hide(false)
-        }
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
+        dismissLoader()
+        
         title = "Failed to connect"
-        hud?.labelText = "Failed to connect"
-        hud?.hide(true, afterDelay: 1.0)
+        showLoader(withText: "Failed to connect", dismissAfter: 2)
         if let _ = selectedPeripheral {
             connect()
         } else {
@@ -239,15 +220,13 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     }
     
     func serialIsReady(_ peripheral: CBPeripheral) {
-        if let hud = progressHUD {
-            hud.hide(false)
-            delay(1.5) {
-                self.unlock()
-                self.isLocked = false
-            }
-            readRssiTimer()
-            lockOverride = false
+        dismissLoader()
+        delay(1.5) {
+            self.unlock()
+            self.isLocked = false
         }
+        readRssiTimer()
+        lockOverride = false
     }
     
     private func readRssiTimer() {
@@ -262,12 +241,9 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     }
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-//        isConnecting = false
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
+        
+        showLoader(withText: "Disconnected", dismissAfter: 1)
         title = "Disconnected"
-        hud?.labelText = "Disconnected"
-        hud?.hide(true, afterDelay: 1.0)
         if let _ = selectedPeripheral {
             connect()
         } else {
@@ -278,10 +254,7 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
     func serialDidChangeState() {
         
         if serial.centralManager.state != .poweredOn {
-            let hud = MBProgressHUD.showAdded(to: view, animated: true)
-            hud?.mode = MBProgressHUDMode.text
-            hud?.labelText = "Bluetooth turned off"
-            hud?.hide(true, afterDelay: 1.0)
+            showLoader(withText: "Bluetooth turned off", dismissAfter: 1)
         }
     }
     
