@@ -46,7 +46,7 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         scanBT()
     }
     
-    func delay(_ delay:Double, closure:@escaping ()->()) {
+    private func delay(_ delay:Double, closure:@escaping ()->()) {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
@@ -117,20 +117,20 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         }
     }
     
-    private func unlock() {
+    func unlock() {
         if !serial.isReady {
             notConnectedAlert()
             return
         }
         serial.sendMessageToDevice("unlock")
         delay(2.3) {
-            // fix for e34 dooble unlock problem, not needed for other cars
+            // fix for e34 double unlock problem, not needed for other cars
             serial.sendMessageToDevice("unlock")
         }
         isLocked = false
         
     }
-    private func lock() {
+    func lock() {
         if !serial.isReady {
             notConnectedAlert()
             return
@@ -261,40 +261,53 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
 }
 extension NewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-        cell.selectionStyle = .none
+        
         
         switch indexPath.row {
         case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
             if !isIgnitionOn {
                 cell.label.text = "Ignition on"
             } else {
                 cell.label.text = "Ignition off"
             }
+            return cell
         case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
             if !isStarted {
                 cell.label.text = "Start engine"
             } else {
                 cell.label.text = "Stop engine"
             }
+            return cell
         case 2:
-            cell.label.text = "Unlock"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LockUnlockCell", for: indexPath) as! LockUnlockCell
+            cell.selectionStyle = .none
+            cell.dashboardReference = self
+            return cell
+//        case 2:
+//            cell.label.text = "Unlock"
+//        case 3:
+//            cell.label.text = "Lock"
         case 3:
-            cell.label.text = "Lock"
-        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
             if !isLightsOn {
                 cell.label.text = "Lights on"
             } else {
                 cell.label.text = "Lights off"
             }
+            return cell
         default:
             break
         }
-        return cell
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -308,12 +321,6 @@ extension NewController: UITableViewDelegate, UITableViewDataSource {
             startIgnition()
         case 1:
             startEngine()
-        case 2:
-            lockOverride = true
-            unlock()
-        case 3:
-            lockOverride = true
-            lock()
         case 4:
             headlights()
         default:

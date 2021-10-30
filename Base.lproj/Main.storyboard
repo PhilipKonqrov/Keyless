@@ -154,6 +154,64 @@
                                             <outlet property="label" destination="kgN-4s-oae" id="6ag-jW-DdE"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LockUnlockCell" rowHeight="80" id="Zqb-bs-eUV" customClass="LockUnlockCell" customModule="Keyless" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="104.5" width="375" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zqb-bs-eUV" id="Hc5-2g-3mX">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="HKw-sB-Mdc">
+                                                    <rect key="frame" x="8" y="8" width="359" height="64"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rtl-l6-SeQ">
+                                                            <rect key="frame" x="0.0" y="0.0" width="175.5" height="64"/>
+                                                            <color key="backgroundColor" name="customBlue"/>
+                                                            <state key="normal" title="Lock">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.CornerRadius">
+                                                                    <integer key="value" value="10"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.MaskToBounds" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="lock:" destination="Zqb-bs-eUV" eventType="touchUpInside" id="iQK-nR-scx"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XVA-bw-v08">
+                                                            <rect key="frame" x="183.5" y="0.0" width="175.5" height="64"/>
+                                                            <color key="backgroundColor" name="customBlue"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                                            <state key="normal" title="Unlock">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.CornerRadius">
+                                                                    <integer key="value" value="10"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.MaskToBounds" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="unlock:" destination="Zqb-bs-eUV" eventType="touchUpInside" id="82V-SN-ykD"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="HKw-sB-Mdc" secondAttribute="trailing" constant="8" id="679-3N-lhD"/>
+                                                <constraint firstAttribute="bottom" secondItem="HKw-sB-Mdc" secondAttribute="bottom" constant="8" id="OZv-9x-kEE"/>
+                                                <constraint firstItem="HKw-sB-Mdc" firstAttribute="leading" secondItem="Hc5-2g-3mX" secondAttribute="leading" constant="8" id="VWv-UF-J9o"/>
+                                                <constraint firstItem="HKw-sB-Mdc" firstAttribute="top" secondItem="Hc5-2g-3mX" secondAttribute="top" constant="8" id="W56-Wg-Nr3"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="lock" destination="rtl-l6-SeQ" id="7VG-oD-cEg"/>
+                                            <outlet property="unlock" destination="XVA-bw-v08" id="TYx-dA-SeH"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
