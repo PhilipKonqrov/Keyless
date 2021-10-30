@@ -10,7 +10,7 @@
 		9252984A272C99D30067205A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92529849272C99D30067205A /* Helper.swift */; };
 		9252984C272DCAD80067205A /* LockUnlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252984B272DCAD80067205A /* LockUnlockCell.swift */; };
 		D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435CB8F24C0F12400BBD60B /* DashboardCell.swift */; };
-		D4D048EE24A1720F00EC4217 /* NewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D048ED24A1720F00EC4217 /* NewController.swift */; };
+		D4D048EE24A1720F00EC4217 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D048ED24A1720F00EC4217 /* HomeVC.swift */; };
 		FA5AB96B1B77A30F007443C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AB96A1B77A30F007443C8 /* AppDelegate.swift */; };
 		FA5AB9701B77A30F007443C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA5AB96E1B77A30F007443C8 /* Main.storyboard */; };
 		FA5AB9721B77A30F007443C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5AB9711B77A30F007443C8 /* Images.xcassets */; };
@@ -23,7 +23,7 @@
 		92529849272C99D30067205A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		9252984B272DCAD80067205A /* LockUnlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockUnlockCell.swift; sourceTree = "<group>"; };
 		D435CB8F24C0F12400BBD60B /* DashboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCell.swift; sourceTree = "<group>"; };
-		D4D048ED24A1720F00EC4217 /* NewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewController.swift; sourceTree = "<group>"; };
+		D4D048ED24A1720F00EC4217 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		FA5AB9651B77A30E007443C8 /* Keyless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Keyless.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5AB9691B77A30F007443C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA5AB96A1B77A30F007443C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 		D435CB8E24C0EF0200BBD60B /* NewController */ = {
 			isa = PBXGroup;
 			children = (
-				D4D048ED24A1720F00EC4217 /* NewController.swift */,
+				D4D048ED24A1720F00EC4217 /* HomeVC.swift */,
 				D435CB8F24C0F12400BBD60B /* DashboardCell.swift */,
 				9252984B272DCAD80067205A /* LockUnlockCell.swift */,
 			);
@@ -175,7 +175,7 @@
 				9252984C272DCAD80067205A /* LockUnlockCell.swift in Sources */,
 				FA5AB98B1B77A398007443C8 /* BluetoothSerial.swift in Sources */,
 				9252984A272C99D30067205A /* Helper.swift in Sources */,
-				D4D048EE24A1720F00EC4217 /* NewController.swift in Sources */,
+				D4D048EE24A1720F00EC4217 /* HomeVC.swift in Sources */,
 				FA5AB96B1B77A30F007443C8 /* AppDelegate.swift in Sources */,
 				FA755D301B78B8FE00A902FE /* ScannerViewController.swift in Sources */,
 				D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */,
@@ -254,7 +254,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -306,7 +306,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

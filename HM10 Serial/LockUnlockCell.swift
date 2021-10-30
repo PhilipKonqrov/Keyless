@@ -12,7 +12,7 @@ class LockUnlockCell: UITableViewCell {
     @IBOutlet weak var lock: UIButton!
     @IBOutlet weak var unlock: UIButton!
     
-    weak var dashboardReference: NewController?
+    weak var dashboardReference: HomeVC?
     
     override func awakeFromNib() {
         super.awakeFromNib()

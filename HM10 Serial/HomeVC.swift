@@ -8,9 +8,16 @@
 
 import UIKit
 import CoreBluetooth
-class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
+class HomeVC: UIViewController, Loadable {
+    
     
     @IBOutlet weak var tableView: UITableView!
+    
+    //MARK: Variables
+    
+    /// The peripherals that have been discovered (no duplicates and sorted by asc RSSI)
+    var peripherals: [(peripheral: CBPeripheral, RSSI: Float)] = []
+    
     var isConnecting = false
     var isConnected = false
     var isStarted = false
@@ -38,6 +45,26 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
             self.scanBT()
         }
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        delay(3) {
+            let alert = UIAlertController(title: "Scanning...", message: nil, preferredStyle: .actionSheet)
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
+                print("User click Dismiss button")
+            }))
+            
+            for peripheral in self.peripherals {
+                alert.addAction(UIAlertAction(title: peripheral.peripheral.name, style: .default , handler:{ (UIAlertAction)in
+                    
+                }))
+            }
+            
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func refresh(_ sender: AnyObject) {
@@ -167,14 +194,7 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         performSegue(withIdentifier: "scanBT", sender: self)
     }
     
-    //MARK: BluetoothSerialDelegate
     
-    func serialDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
-        if peripheral.identifier.uuidString == remoteStarterId {
-            selectedPeripheral = peripheral
-            connect()
-        }
-    }
     
     func serialDidReadRSSI(_ rssi: NSNumber) {
         print("Signal rssi: \(rssi)")
@@ -196,6 +216,105 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         serial.connectToPeripheral(peripheral)
         delay(10) {
             self.connectTimeOut()
+        }
+    }
+    
+    
+    
+    private func readRssiTimer() {
+         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (Timer) in
+             serial?.readRSSI()
+         })
+     }
+    
+    
+    
+}
+extension HomeVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
+            if !isIgnitionOn {
+                cell.label.text = "Ignition on"
+            } else {
+                cell.label.text = "Ignition off"
+            }
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
+            if !isStarted {
+                cell.label.text = "Start engine"
+            } else {
+                cell.label.text = "Stop engine"
+            }
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LockUnlockCell", for: indexPath) as! LockUnlockCell
+            cell.selectionStyle = .none
+            cell.dashboardReference = self
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
+            cell.selectionStyle = .none
+            if !isLightsOn {
+                cell.label.text = "Lights on"
+            } else {
+                cell.label.text = "Lights off"
+            }
+            return cell
+        default:
+            break
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch indexPath.row {
+        case 0:
+            startIgnition()
+        case 1:
+            startEngine()
+        case 4:
+            headlights()
+        default:
+            break
+        }
+        tableView.reloadData()
+    }
+}
+
+//MARK: - BluetoothSerialDelegate
+
+extension HomeVC: BluetoothSerialDelegate  {
+    
+    func serialDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
+        
+        // check whether it is a duplicate
+        for exisiting in peripherals {
+            if exisiting.peripheral.identifier == peripheral.identifier { return }
+        }
+        
+        // add to the array, next sort & reload
+        let theRSSI = RSSI?.floatValue ?? 0.0
+        peripherals.append((peripheral: peripheral, RSSI: theRSSI))
+        peripherals.sort { $0.RSSI < $1.RSSI }
+        
+        if peripheral.identifier.uuidString == remoteStarterId {
+            selectedPeripheral = peripheral
+            connect()
         }
     }
     
@@ -229,12 +348,6 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         lockOverride = false
     }
     
-    private func readRssiTimer() {
-         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (Timer) in
-             serial?.readRSSI()
-         })
-     }
-    
     func serialDidReceiveString(_ message: String) {
         // add the received text to the textView, optionally with a line break at the end
         
@@ -256,76 +369,5 @@ class NewController: UIViewController, BluetoothSerialDelegate, Loadable {
         if serial.centralManager.state != .poweredOn {
             showLoader(withText: "Bluetooth turned off", dismissAfter: 1)
         }
-    }
-    
-}
-extension NewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isIgnitionOn {
-                cell.label.text = "Ignition on"
-            } else {
-                cell.label.text = "Ignition off"
-            }
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isStarted {
-                cell.label.text = "Start engine"
-            } else {
-                cell.label.text = "Stop engine"
-            }
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LockUnlockCell", for: indexPath) as! LockUnlockCell
-            cell.selectionStyle = .none
-            cell.dashboardReference = self
-            return cell
-//        case 2:
-//            cell.label.text = "Unlock"
-//        case 3:
-//            cell.label.text = "Lock"
-        case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isLightsOn {
-                cell.label.text = "Lights on"
-            } else {
-                cell.label.text = "Lights off"
-            }
-            return cell
-        default:
-            break
-        }
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        switch indexPath.row {
-        case 0:
-            startIgnition()
-        case 1:
-            startEngine()
-        case 4:
-            headlights()
-        default:
-            break
-        }
-        tableView.reloadData()
     }
 }

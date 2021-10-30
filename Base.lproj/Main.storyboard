@@ -98,7 +98,7 @@
         <!--Keyless-->
         <scene sceneID="whr-v2-8ON">
             <objects>
-                <viewController id="Ff5-b3-kuy" customClass="NewController" customModule="Keyless" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Ff5-b3-kuy" customClass="HomeVC" customModule="Keyless" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VwM-22-C7A"/>
                         <viewControllerLayoutGuide type="bottom" id="IdZ-ZA-jas"/>
