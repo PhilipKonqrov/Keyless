@@ -5,7 +5,7 @@ import CoreBluetooth
 var serial: BluetoothSerial!
 
 // Delegate functions
-protocol BluetoothSerialDelegate: class {
+protocol BluetoothSerialDelegate: AnyObject {
     // ** Required **
     
     /// Called when de state of the CBCentralManager changes (e.g. when bluetooth is turned on/off)
@@ -269,7 +269,9 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         
         // then the string
         if let str = String(data: data!, encoding: String.Encoding.utf8) {
-            delegate?.serialDidReceiveString(str)
+            let returnedBleCommand: [String: String] = ["comand": str]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil, userInfo: returnedBleCommand)
+//            delegate?.serialDidReceiveString(str)
         } else {
             //print("Received an invalid string!") uncomment for debugging
         }

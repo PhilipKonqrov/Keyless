@@ -32,12 +32,18 @@ class NewController: UIViewController, BluetoothSerialDelegate {
         tableView.addSubview(refreshControl)
         // init serial
         serial = BluetoothSerial(delegate: self)
-        serial.delegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.serialDidReceiveString(_:)), name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil)
         delay(1) {
             self.scanBT()
         }
         
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        serial.delegate = self
     }
     
     @objc func refresh(_ sender: AnyObject) {
@@ -239,8 +245,11 @@ class NewController: UIViewController, BluetoothSerialDelegate {
          })
      }
     
-    func serialDidReceiveString(_ message: String) {
+    @objc func serialDidReceiveString(_ notification: NSNotification) {
         // add the received text to the textView, optionally with a line break at the end
+        
+        guard let dict = notification.userInfo as NSDictionary? else { return }
+        guard let message = dict["comand"] as? String else { return }
         
         let msgArr = message.components(separatedBy: "\r\n")
         for separatedMsg in msgArr {
