@@ -10,6 +10,7 @@ import UIKit
 
 class DashboardCell: UITableViewCell {
 
+    @IBOutlet weak var container: UIView!
     @IBOutlet weak var label: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -41,9 +41,9 @@ fileprivate extension UIButton {
         
         switch buttonStyle {
         case .lock:
-            buttonIco = UIImage(systemName: "lock.open.fill", withConfiguration: buttonIconConfig)?.alpha(0.8).withRenderingMode(.alwaysTemplate)
-        case .unlock:
             buttonIco = UIImage(systemName: "lock.fill", withConfiguration: buttonIconConfig)?.alpha(0.8).withRenderingMode(.alwaysTemplate)
+        case .unlock:
+            buttonIco = UIImage(systemName: "lock.open.fill", withConfiguration: buttonIconConfig)?.alpha(0.8).withRenderingMode(.alwaysTemplate)
         }
         setImage(buttonIco, for: .normal)
         centerTextAndImage(spacing: 10)

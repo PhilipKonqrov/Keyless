@@ -166,8 +166,8 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     /// Send a string to the device
     func sendMessageToDevice(_ message: String) {
         guard isReady else { return }
-        
-        if let data = message.data(using: String.Encoding.utf8) {
+        let msg = message + "#"
+        if let data = msg.data(using: String.Encoding.utf8) {
             connectedPeripheral!.writeValue(data, for: writeCharacteristic!, type: writeType)
         }
     }
@@ -278,7 +278,8 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         
         // then the string
         if let str = String(data: data!, encoding: String.Encoding.utf8) {
-            delegate?.serialDidReceiveString(str)
+            let returnedBleCommand: [String: String] = ["comand": str]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil, userInfo: returnedBleCommand)
         } else {
             //print("Received an invalid string!") uncomment for debugging
         }

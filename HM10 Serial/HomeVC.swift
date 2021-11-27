@@ -41,6 +41,8 @@ class HomeVC: UIViewController, Loadable {
         serial = BluetoothSerial(delegate: self)
         serial.delegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.serialDidReceiveString(_:)), name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil)
+        
         delay(1) {
             self.scanBT()
         }
@@ -50,7 +52,8 @@ class HomeVC: UIViewController, Loadable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        delay(3) {
+        delay(3) { [weak self] in
+            guard let self = self else { return }
             let alert = UIAlertController(title: "Scanning...", message: nil, preferredStyle: .actionSheet)
             
             alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
@@ -58,12 +61,18 @@ class HomeVC: UIViewController, Loadable {
             }))
             
             for peripheral in self.peripherals {
-                alert.addAction(UIAlertAction(title: peripheral.peripheral.name, style: .default , handler:{ (UIAlertAction)in
-                    
+                alert.addAction(UIAlertAction(title: peripheral.peripheral.name, style: .default , handler: { [weak self] _ in
+                    serial.stopScan()
+                    serial.connectToPeripheral(peripheral.peripheral)
+                    self?.dismiss(animated: true)
                 }))
             }
             
             self.present(alert, animated: true, completion: nil)
+            
+            self.delay(5) {
+                self.dismiss(animated: true)
+            }
         }
     }
     
@@ -172,21 +181,25 @@ class HomeVC: UIViewController, Loadable {
             return
         }
         if !isLightsOn {
-            serial.sendMessageToDevice("ignOn")
-            isIgnitionOn = true
-            delay(1.5) {
-                serial.sendMessageToDevice("lightsOn")
-                self.isLightsOn = true
-                self.tableView.reloadData()
+            guard isIgnitionOn else {
+                serial.sendMessageToDevice("ignOn")
+                isIgnitionOn = true
+                delay(1.5) {
+                    serial.sendMessageToDevice("lightsOn")
+                    self.isLightsOn = true
+                    self.tableView.reloadData()
+                }
+                return
             }
+            
+            serial.sendMessageToDevice("lightsOn")
+            self.isLightsOn = true
+            self.tableView.reloadData()
+            
         } else {
-            serial.sendMessageToDevice("ignOff")
-            isIgnitionOn = false
-            delay(1.5) {
-                serial.sendMessageToDevice("lightsOff")
-                self.isLightsOn = false
-                self.tableView.reloadData()
-            }
+            serial.sendMessageToDevice("lightsOff")
+            self.isLightsOn = false
+            self.tableView.reloadData()
         }
     }
     
@@ -198,14 +211,16 @@ class HomeVC: UIViewController, Loadable {
     
     func serialDidReadRSSI(_ rssi: NSNumber) {
         print("Signal rssi: \(rssi)")
-//        print(rssi.intValue)
-        if rssi.intValue < -90 && !lockOverride {
-            if isLocked { return }
-            lock()
-        } else if rssi.intValue > -85 && !lockOverride {
-            if !isLocked { return }
-            unlock()
-        }
+        
+        // Disable proximity lock unlock function for now
+        
+//        if rssi.intValue < -90 && !lockOverride {
+//            if isLocked { return }
+//            lock()
+//        } else if rssi.intValue > -85 && !lockOverride {
+//            if !isLocked { return }
+//            unlock()
+//        }
     }
     
     func connect() {
@@ -243,8 +258,10 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
             if !isIgnitionOn {
                 cell.label.text = "Ignition on"
+                cell.container.backgroundColor = UIColor(named: "customBlue")
             } else {
                 cell.label.text = "Ignition off"
+                cell.container.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
             }
             return cell
         case 1:
@@ -266,8 +283,10 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
             if !isLightsOn {
                 cell.label.text = "Lights on"
+                cell.container.backgroundColor = UIColor(named: "customBlue")
             } else {
                 cell.label.text = "Lights off"
+                cell.container.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
             }
             return cell
         default:
@@ -287,7 +306,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
             startIgnition()
         case 1:
             startEngine()
-        case 4:
+        case 3:
             headlights()
         default:
             break
@@ -348,10 +367,40 @@ extension HomeVC: BluetoothSerialDelegate  {
         lockOverride = false
     }
     
-    func serialDidReceiveString(_ message: String) {
-        // add the received text to the textView, optionally with a line break at the end
-        
-    }
+    @objc private func serialDidReceiveString(_ notification: NSNotification) {
+            // add the received text to the textView, optionally with a line break at the end
+            
+            guard let dict = notification.userInfo as NSDictionary? else { return }
+            guard let message = dict["comand"] as? String else { return }
+            
+            let msgArr = message.components(separatedBy: "\r\n")
+            for separatedMsg in msgArr {
+                let msg = separatedMsg.replacingOccurrences(of: "\r\n", with: "")
+                if msg == "" { break }
+                print(msg)
+                switch msg {
+                case "ignOn":
+                    isIgnitionOn = true
+                case "ignOff":
+                    isIgnitionOn = false
+                case "starterOn":
+                    break
+                case "starterOff":
+                    break
+                case "unlockOn":
+                    break
+                case "unlockOff":
+                    break
+                case "lightsOn":
+                    isLightsOn = true
+                case "lightsOff":
+                    isLightsOn = false
+                default:
+                    break
+                }
+            }
+            tableView.reloadData()
+        }
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         
