@@ -20,30 +20,25 @@ class HomeVC: UIViewController, Loadable {
     
     var isConnecting = false
     var isConnected = false
-    var isStarted = false
-    var isIgnitionOn = false
-    var isLightsOn = false
-    var isLocked = true
     var lockOverride = false
 //    let remoteStarterId = "637D5AC5-3EED-DAE7-8E10-FA550CA6877E"
     let remoteStarterId = "39B01AB6-EABC-3B29-5B46-7D92A28DFF9C"
     var refreshControl = UIRefreshControl()
     var selectedPeripheral: CBPeripheral?
     var loader: UIAlertController?
+    
+    var commandsManager = CommandsManager.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        tableView.addSubview(refreshControl)
         // init serial
         serial = BluetoothSerial(delegate: self)
-        serial.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.serialDidReceiveString(_:)), name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil)
         
-        delay(1) {
+        Helper.delay(1) {
             self.scanBT()
         }
         
@@ -52,7 +47,7 @@ class HomeVC: UIViewController, Loadable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        delay(3) { [weak self] in
+        Helper.delay(3) { [weak self] in
             guard let self = self else { return }
             let alert = UIAlertController(title: "Scanning...", message: nil, preferredStyle: .actionSheet)
             
@@ -70,22 +65,12 @@ class HomeVC: UIViewController, Loadable {
             
             self.present(alert, animated: true, completion: nil)
             
-            self.delay(5) {
+            Helper.delay(5) {
                 self.dismiss(animated: true)
             }
         }
     }
     
-    @objc func refresh(_ sender: AnyObject) {
-        refreshControl.endRefreshing()
-        isConnecting = false
-        scanBT()
-    }
-    
-    private func delay(_ delay:Double, closure:@escaping ()->()) {
-        let when = DispatchTime.now() + delay
-        DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
-    }
     func scanBT() {
         if serial.centralManager.state != .poweredOn {
             title = "Bluetooth not turned on"
@@ -108,99 +93,6 @@ class HomeVC: UIViewController, Loadable {
         
         dismissLoader()
         showLoader(withText: "Failed to connect", dismissAfter: 2)
-    }
-    
-    func notConnectedAlert() {
-        let alert = UIAlertController(title: "Not connected", message: "Connect to the vehicle first.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: { action -> Void in self.dismiss(animated: true, completion: nil) }))
-        present(alert, animated: true, completion: nil)
-    }
-    
-    private func startEngine() {
-        if !serial.isReady {
-            notConnectedAlert()
-            return
-        }
-        startIgnition()
-        delay(1) { [weak self] in
-            guard let self = self else { return }
-            if !self.isStarted {
-                serial.sendMessageToDevice("startEngine")
-                self.isStarted = true
-                self.isIgnitionOn = true
-            } else {
-                serial.sendMessageToDevice("stopEngine")
-                self.isStarted = false
-                self.isIgnitionOn = false
-            }
-        }
-        
-        
-    }
-    
-    private func startIgnition() {
-        if !serial.isReady {
-            notConnectedAlert()
-            return
-        }
-        if !isIgnitionOn {
-            serial.sendMessageToDevice("ignOn")
-            isIgnitionOn = true
-        } else {
-            serial.sendMessageToDevice("ignOff")
-            isIgnitionOn = false
-            isStarted = false
-        }
-    }
-    
-    func unlock() {
-        if !serial.isReady {
-            notConnectedAlert()
-            return
-        }
-        serial.sendMessageToDevice("unlock")
-        delay(2.3) {
-            // fix for e34 double unlock problem, not needed for other cars
-            serial.sendMessageToDevice("unlock")
-        }
-        isLocked = false
-        
-    }
-    func lock() {
-        if !serial.isReady {
-            notConnectedAlert()
-            return
-        }
-        serial.sendMessageToDevice("lock")
-        isLocked = true
-    }
-    
-    private func headlights() {
-        if !serial.isReady {
-            notConnectedAlert()
-            return
-        }
-        if !isLightsOn {
-            guard isIgnitionOn else {
-                serial.sendMessageToDevice("ignOn")
-                isIgnitionOn = true
-                delay(1.5) {
-                    serial.sendMessageToDevice("lightsOn")
-                    self.isLightsOn = true
-                    self.tableView.reloadData()
-                }
-                return
-            }
-            
-            serial.sendMessageToDevice("lightsOn")
-            self.isLightsOn = true
-            self.tableView.reloadData()
-            
-        } else {
-            serial.sendMessageToDevice("lightsOff")
-            self.isLightsOn = false
-            self.tableView.reloadData()
-        }
     }
     
     @IBAction func connect(_ sender: Any) {
@@ -229,7 +121,7 @@ class HomeVC: UIViewController, Loadable {
         guard let peripheral = selectedPeripheral else { return }
         serial.stopScan()
         serial.connectToPeripheral(peripheral)
-        delay(10) {
+        Helper.delay(10) {
             self.connectTimeOut()
         }
     }
@@ -251,48 +143,27 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isIgnitionOn {
-                cell.label.text = "Ignition on"
-                cell.container.backgroundColor = UIColor(named: "customBlue")
-            } else {
-                cell.label.text = "Ignition off"
-                cell.container.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-            }
-            return cell
+            return defaultCell(with: indexPath, and: .ignition)
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isStarted {
-                cell.label.text = "Start engine"
-            } else {
-                cell.label.text = "Stop engine"
-            }
-            return cell
+            return defaultCell(with: indexPath, and: .startEngine)
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LockUnlockCell", for: indexPath) as! LockUnlockCell
-            cell.selectionStyle = .none
-            cell.dashboardReference = self
-            return cell
+            let doorUnlockCell = tableView.dequeueReusableCell(withIdentifier: "LockUnlockCell", for: indexPath) as! LockUnlockCell
+            doorUnlockCell.selectionStyle = .none
+            doorUnlockCell.dashboardReference = self
+            return doorUnlockCell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: indexPath) as! DashboardCell
-            cell.selectionStyle = .none
-            if !isLightsOn {
-                cell.label.text = "Lights on"
-                cell.container.backgroundColor = UIColor(named: "customBlue")
-            } else {
-                cell.label.text = "Lights off"
-                cell.container.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-            }
-            return cell
+            return defaultCell(with: indexPath, and: .headlights)
         default:
-            break
+            return UITableViewCell()
         }
-        return UITableViewCell()
+    }
+    
+    private func defaultCell(with index: IndexPath, and cellType: DashboardCell.CellType) -> DashboardCell {
+        let defaultCell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: index) as! DashboardCell
+        defaultCell.setup(with: cellType)
+        return defaultCell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -301,15 +172,15 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch indexPath.row {
-        case 0:
-            startIgnition()
-        case 1:
-            startEngine()
-        case 3:
-            headlights()
-        default:
-            break
+        
+        guard serial.isReady else {
+            presentSimpleAlert(with: "Not connected", message: "Connect to the vehicle first.", buttonTitle: "Dismiss")
+            return
+        }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) as? DashboardCell else { return }
+        cell.cellAction { [weak self] in
+            self?.tableView.reloadData()
         }
         tableView.reloadData()
     }
@@ -351,17 +222,15 @@ extension HomeVC: BluetoothSerialDelegate  {
     }
     
     func serialDidConnect(_ peripheral: CBPeripheral) {
-        if peripheral.identifier.uuidString == remoteStarterId {
-            isConnected = true
-            title = "Connected"
-        }
+        isConnected = true
+        title = "Connected"
     }
     
     func serialIsReady(_ peripheral: CBPeripheral) {
         dismissLoader()
-        delay(1.5) {
-            self.unlock()
-            self.isLocked = false
+        Helper.delay(1.5) {
+            self.commandsManager.unlock()
+            self.commandsManager.isLocked = false
         }
         readRssiTimer()
         lockOverride = false
@@ -380,9 +249,9 @@ extension HomeVC: BluetoothSerialDelegate  {
                 print(msg)
                 switch msg {
                 case "ignOn":
-                    isIgnitionOn = true
+                    commandsManager.isIgnitionOn = true
                 case "ignOff":
-                    isIgnitionOn = false
+                    commandsManager.isIgnitionOn = false
                 case "starterOn":
                     break
                 case "starterOff":
@@ -392,9 +261,9 @@ extension HomeVC: BluetoothSerialDelegate  {
                 case "unlockOff":
                     break
                 case "lightsOn":
-                    isLightsOn = true
+                    commandsManager.isLightsOn = true
                 case "lightsOff":
-                    isLightsOn = false
+                    commandsManager.isLightsOn = false
                 default:
                     break
                 }

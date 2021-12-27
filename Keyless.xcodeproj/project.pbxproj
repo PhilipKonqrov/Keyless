@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		924361B92778ED1400CEFEC2 /* CommandsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924361B82778ED1400CEFEC2 /* CommandsManager.swift */; };
+		924361BD2779129100CEFEC2 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924361BC2779129100CEFEC2 /* HeaderView.swift */; };
 		9252984A272C99D30067205A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92529849272C99D30067205A /* Helper.swift */; };
 		9252984C272DCAD80067205A /* LockUnlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252984B272DCAD80067205A /* LockUnlockCell.swift */; };
 		D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435CB8F24C0F12400BBD60B /* DashboardCell.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		924361B82778ED1400CEFEC2 /* CommandsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandsManager.swift; sourceTree = "<group>"; };
+		924361BC2779129100CEFEC2 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		92529849272C99D30067205A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		9252984B272DCAD80067205A /* LockUnlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockUnlockCell.swift; sourceTree = "<group>"; };
 		D435CB8F24C0F12400BBD60B /* DashboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCell.swift; sourceTree = "<group>"; };
@@ -61,6 +65,7 @@
 				D4D048ED24A1720F00EC4217 /* HomeVC.swift */,
 				D435CB8F24C0F12400BBD60B /* DashboardCell.swift */,
 				9252984B272DCAD80067205A /* LockUnlockCell.swift */,
+				924361BC2779129100CEFEC2 /* HeaderView.swift */,
 			);
 			name = NewController;
 			sourceTree = "<group>";
@@ -69,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				FA5AB96A1B77A30F007443C8 /* AppDelegate.swift */,
+				924361B82778ED1400CEFEC2 /* CommandsManager.swift */,
 				D435CB8D24C0EEC100BBD60B /* ViewControllers */,
 				FA5AB98A1B77A398007443C8 /* BluetoothSerial.swift */,
 				92529849272C99D30067205A /* Helper.swift */,
@@ -173,10 +179,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9252984C272DCAD80067205A /* LockUnlockCell.swift in Sources */,
+				924361BD2779129100CEFEC2 /* HeaderView.swift in Sources */,
 				FA5AB98B1B77A398007443C8 /* BluetoothSerial.swift in Sources */,
 				9252984A272C99D30067205A /* Helper.swift in Sources */,
 				D4D048EE24A1720F00EC4217 /* HomeVC.swift in Sources */,
 				FA5AB96B1B77A30F007443C8 /* AppDelegate.swift in Sources */,
+				924361B92778ED1400CEFEC2 /* CommandsManager.swift in Sources */,
 				FA755D301B78B8FE00A902FE /* ScannerViewController.swift in Sources */,
 				D435CB9024C0F12400BBD60B /* DashboardCell.swift in Sources */,
 			);

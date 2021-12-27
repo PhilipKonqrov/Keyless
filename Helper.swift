@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+class Helper {
+    class func delay(_ delay:Double, closure:@escaping ()->()) {
+        let when = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
+    }
+}
+
 protocol Loadable where Self: UIViewController {
     var loader: UIAlertController? { get set }
 }
@@ -55,6 +62,7 @@ extension UIButton {
         }
     }
 }
+
 extension UIImage {
 
     func alpha(_ value:CGFloat) -> UIImage {
@@ -63,5 +71,15 @@ extension UIImage {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
+    }
+}
+
+extension UIViewController {
+    
+    /// Presents alert box with one button without action.
+    func presentSimpleAlert(with title: String, message: String, buttonTitle: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: { action -> Void in self.dismiss(animated: true, completion: nil) }))
+        present(alert, animated: true, completion: nil)
     }
 }

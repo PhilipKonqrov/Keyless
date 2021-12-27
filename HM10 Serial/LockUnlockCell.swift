@@ -13,6 +13,7 @@ class LockUnlockCell: UITableViewCell {
     @IBOutlet weak var unlock: UIButton!
     
     weak var dashboardReference: HomeVC?
+    lazy var commandsManager = CommandsManager.shared
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,11 +24,11 @@ class LockUnlockCell: UITableViewCell {
     
     @IBAction func lock(_ sender: Any) {
         dashboardReference?.lockOverride = true
-        dashboardReference?.lock()
+        commandsManager.lock()
     }
     @IBAction func unlock(_ sender: Any) {
         dashboardReference?.lockOverride = true
-        dashboardReference?.unlock()
+        commandsManager.unlock()
     }
     
 }

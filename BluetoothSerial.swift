@@ -9,6 +9,7 @@
 
 import UIKit
 import CoreBluetooth
+import Combine
 
 /// Global serial handler, don't forget to initialize it with init(delgate:)
 var serial: BluetoothSerial!
@@ -63,9 +64,20 @@ extension BluetoothSerialDelegate {
 }
 
 
-final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+extension BluetoothSerial {
+    enum ConnectionStatus {
+        case connected
+        case disconnected
+        case failed
+    }
+}
+
+class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // MARK: Variables
+    
+    let serialConnectionStatus = PassthroughSubject<(CBPeripheral, ConnectionStatus), Error>()
+    
     
     /// The delegate object the BluetoothDelegate methods will be called upon
     weak var delegate: BluetoothSerialDelegate?
@@ -203,6 +215,8 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         
         // send it to the delegate
         delegate?.serialDidConnect(peripheral)
+        
+        serialConnectionStatus.send((peripheral, .connected))
 
         // Okay, the peripheral is connected but we're not ready yet!
         // First get the 0xFFE0 service
