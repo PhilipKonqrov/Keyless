@@ -10,7 +10,6 @@
 import UIKit
 import CoreBluetooth
 import Combine
-
 /// Global serial handler, don't forget to initialize it with init(delgate:)
 var serial: BluetoothSerial!
 
@@ -78,6 +77,7 @@ class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     
     let serialConnectionStatus = PassthroughSubject<(CBPeripheral, ConnectionStatus), Error>()
     
+    @Published var rssiSignal = 0
     
     /// The delegate object the BluetoothDelegate methods will be called upon
     weak var delegate: BluetoothSerialDelegate?
@@ -178,8 +178,8 @@ class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     /// Send a string to the device
     func sendMessageToDevice(_ message: String) {
         guard isReady else { return }
-        let msg = message + "#"
-        if let data = msg.data(using: String.Encoding.utf8) {
+//        let msg = message + "#"
+        if let data = message.data(using: String.Encoding.utf8) {
             connectedPeripheral!.writeValue(data, for: writeCharacteristic!, type: writeType)
         }
     }
@@ -234,6 +234,8 @@ class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
 
         // send it to the delegate
         delegate?.serialDidDisconnect(peripheral, error: error as NSError?)
+        
+        serialConnectionStatus.send((peripheral, .disconnected))
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -241,6 +243,8 @@ class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
 
         // just send it to the delegate
         delegate?.serialDidFailToConnect(peripheral, error: error as NSError?)
+        
+        serialConnectionStatus.send((peripheral, .failed))
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -306,5 +310,8 @@ class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
         delegate?.serialDidReadRSSI(RSSI)
+        guard let rssi = RSSI as? Int else { return }
+        rssiSignal = rssi
+//        rssiSignal.send(rssi)
     }
 }

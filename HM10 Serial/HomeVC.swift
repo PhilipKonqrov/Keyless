@@ -22,7 +22,7 @@ class HomeVC: UIViewController, Loadable {
     var isConnected = false
     var lockOverride = false
 //    let remoteStarterId = "637D5AC5-3EED-DAE7-8E10-FA550CA6877E"
-    let remoteStarterId = "39B01AB6-EABC-3B29-5B46-7D92A28DFF9C"
+    let lastConnectedDevice = UserDefaults.standard.string(forKey: "lastConnectedDevice")
     var refreshControl = UIRefreshControl()
     var selectedPeripheral: CBPeripheral?
     var loader: UIAlertController?
@@ -38,37 +38,41 @@ class HomeVC: UIViewController, Loadable {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.serialDidReceiveString(_:)), name: NSNotification.Name(rawValue: "bleCommandReceived"), object: nil)
         
-        Helper.delay(1) {
-            self.scanBT()
-        }
+        Helper.delay(1) { self.scanBT() }
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    private func presentScanPopup() {
+        let alert = UIAlertController(title: "Found these devices:", message: nil, preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
+            print("User click Dismiss button")
+        }))
+
         
-        Helper.delay(3) { [weak self] in
-            guard let self = self else { return }
-            let alert = UIAlertController(title: "Scanning...", message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
-                print("User click Dismiss button")
-            }))
-            
-            for peripheral in self.peripherals {
-                alert.addAction(UIAlertAction(title: peripheral.peripheral.name, style: .default , handler: { [weak self] _ in
-                    serial.stopScan()
-                    serial.connectToPeripheral(peripheral.peripheral)
+        for peripheral in peripherals.compactMap{ $0.peripheral }.filter({ $0.name != nil }) {
+            if peripheral == serial.connectedPeripheral {
+                let action = UIAlertAction(title: "\(peripheral.name!) \u{25CF}", style: .default , handler: { [weak self] _ in
+                    serial.disconnect()
                     self?.dismiss(animated: true)
-                }))
-            }
-            
-            self.present(alert, animated: true, completion: nil)
-            
-            Helper.delay(5) {
-                self.dismiss(animated: true)
+                })
+                action.setValue(UIColor.green, forKey: "titleTextColor")
+                alert.addAction(action)
+            } else {
+                let action = UIAlertAction(title: peripheral.name, style: .default , handler: { [weak self] _ in
+                    serial.stopScan()
+                    serial.connectToPeripheral(peripheral)
+                    self?.dismiss(animated: true)
+                })
+                alert.addAction(action)
             }
         }
+
+        present(alert, animated: true, completion: nil)
+
+//            Helper.delay(5) {
+//                self.dismiss(animated: true)
+//            }
     }
     
     func scanBT() {
@@ -96,8 +100,14 @@ class HomeVC: UIViewController, Loadable {
     }
     
     @IBAction func connect(_ sender: Any) {
-        performSegue(withIdentifier: "scanBT", sender: self)
+//        performSegue(withIdentifier: "scanBT", sender: self)
     }
+    
+    @IBAction func searchDevices(_ sender: Any) {
+        serial.startScan()
+        presentScanPopup()
+    }
+    
     
     
     
@@ -160,6 +170,13 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        cell.transform = CGAffineTransform(translationX: 0, y: cell.contentView.frame.height)
+//        UIView.animate(withDuration: 0.5, delay: 0.05 * Double(indexPath.row), animations: {
+//              cell.transform = CGAffineTransform(translationX: cell.contentView.frame.width, y: cell.contentView.frame.height)
+//        })
+    }
+    
     private func defaultCell(with index: IndexPath, and cellType: DashboardCell.CellType) -> DashboardCell {
         let defaultCell = tableView.dequeueReusableCell(withIdentifier: "dashboardCell", for: index) as! DashboardCell
         defaultCell.setup(with: cellType)
@@ -202,9 +219,28 @@ extension HomeVC: BluetoothSerialDelegate  {
         peripherals.append((peripheral: peripheral, RSSI: theRSSI))
         peripherals.sort { $0.RSSI < $1.RSSI }
         
-        if peripheral.identifier.uuidString == remoteStarterId {
+        if peripheral.identifier.uuidString == lastConnectedDevice {
             selectedPeripheral = peripheral
             connect()
+        } else {
+            let alert = UIAlertController(title: "New device was found:", message: nil, preferredStyle: .actionSheet)
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
+                print("User click Dismiss button")
+            }))
+            
+            for peripheral in self.peripherals {
+                alert.addAction(UIAlertAction(title: peripheral.peripheral.name, style: .default , handler: { [weak self] _ in
+                    serial.stopScan()
+                    serial.connectToPeripheral(peripheral.peripheral)
+                    
+                    UserDefaults.standard.set(peripheral.peripheral.identifier.uuidString, forKey: "lastConnectedDevice")
+                    
+                    self?.dismiss(animated: true)
+                }))
+            }
+            
+            self.present(alert, animated: true, completion: nil)
         }
     }
     

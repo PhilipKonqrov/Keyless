@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -139,14 +140,32 @@
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.MaskToBounds" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epD-L0-5vz">
+                                                                <rect key="frame" x="323" y="0.0" width="28" height="28"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="28" id="2D3-xB-0RL"/>
+                                                                    <constraint firstAttribute="height" constant="28" id="lFK-WS-Zik"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                <color key="tintColor" systemColor="labelColor"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal">
+                                                                    <imageReference key="image" image="magnifyingglass" catalog="system" symbolScale="large"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="searchDevices:" destination="Ff5-b3-kuy" eventType="touchUpInside" id="wjr-xF-gR7"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstItem="kFy-0y-75T" firstAttribute="leading" secondItem="F6u-xX-2jV" secondAttribute="trailing" constant="8" id="A53-a4-hgn"/>
                                                             <constraint firstItem="F6u-xX-2jV" firstAttribute="top" secondItem="0Vg-Db-1J1" secondAttribute="top" id="RYa-w3-UTC"/>
                                                             <constraint firstAttribute="bottom" secondItem="F6u-xX-2jV" secondAttribute="bottom" id="aaM-na-61Q"/>
+                                                            <constraint firstItem="epD-L0-5vz" firstAttribute="centerY" secondItem="0Vg-Db-1J1" secondAttribute="centerY" id="dFN-fl-fbh"/>
                                                             <constraint firstItem="kFy-0y-75T" firstAttribute="centerY" secondItem="F6u-xX-2jV" secondAttribute="centerY" id="dPA-Db-PHg"/>
                                                             <constraint firstItem="F6u-xX-2jV" firstAttribute="leading" secondItem="0Vg-Db-1J1" secondAttribute="leading" id="myX-GG-eJl"/>
+                                                            <constraint firstAttribute="trailing" secondItem="epD-L0-5vz" secondAttribute="trailing" constant="8" id="uM5-wc-XqT"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
@@ -165,7 +184,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Soe-uF-2fd">
                                                 <rect key="frame" x="0.0" y="56" width="359" height="28"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Signal strength: -90db" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eva-sh-f5l">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Signal strength: Unknown" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eva-sh-f5l">
                                                         <rect key="frame" x="0.0" y="0.0" width="359" height="28"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -370,6 +389,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <namedColor name="customBlack">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -382,6 +402,9 @@
         <namedColor name="customWhite2">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

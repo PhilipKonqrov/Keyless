@@ -23,6 +23,7 @@ class HeaderView: UIView {
     @IBOutlet weak var signalStrengthLabel: UILabel?
     
     private var connectionStatusCancellable: AnyCancellable?
+    private var rssiCancellable: AnyCancellable?
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -42,16 +43,23 @@ class HeaderView: UIView {
                     self?.connectionStatusLabel?.text = "Status: Connected"
                     self?.connectionStatusView?.backgroundColor = .systemGreen
                     self?.deviceNameLabel?.text = "Device name: \(peripheral.name ?? "Unknown")"
+                    self?.rssiCancellable = serial.$rssiSignal
+                        .receive(on: RunLoop.main)
+                        .sink { [weak self] signal in
+                            self?.signalStrengthLabel?.text = "Signal strength: \(serial.rssiSignal)dBm"
+                        }
                 case .disconnected:
+                    self?.rssiCancellable?.cancel()
                     self?.connectionStatusLabel?.text = "Status: Disconnected"
+                    self?.connectionStatusView?.backgroundColor = .systemRed
+                    self?.signalStrengthLabel?.text = "Signal strength: Unknown"
                 case .failed:
+                    self?.rssiCancellable?.cancel()
                     self?.connectionStatusLabel?.text = "Status: Failure"
+                    self?.connectionStatusView?.backgroundColor = .systemRed
+                    self?.signalStrengthLabel?.text = "Signal strength: Unknown"
                 }
             }
-
-
-        
-        
     }
 }
 
